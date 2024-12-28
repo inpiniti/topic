@@ -1,9 +1,13 @@
 import ani_list from "./ani_list";
 import daily from "./daily";
+import monthly from "./monthly";
+import yearly from "./yearly";
 
 const supabase = {
   ani_list,
   daily,
+  monthly,
+  yearly,
 };
 
 export default supabase;

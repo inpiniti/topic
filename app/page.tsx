@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -5,54 +7,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
+import { useRankingQuery } from "./query/rankingQuery";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-const invoices = [
-  {
-    invoice: '1',
-    paymentStatus: '주술회전',
-    totalAmount: 'ㅇ',
-    paymentMethod: 'ㅇ',
-  },
-  {
-    invoice: '2',
-    paymentStatus: '드래곤볼',
-    totalAmount: 'ㅇ',
-    paymentMethod: 'ㅇ',
-  },
-  {
-    invoice: '3',
-    paymentStatus: '나루토',
-    totalAmount: '$350.00',
-    paymentMethod: 'Bank Transfer',
-  },
-  {
-    invoice: '4',
-    paymentStatus: '원피스',
-    totalAmount: '$450.00',
-    paymentMethod: 'Credit Card',
-  },
-  {
-    invoice: '5',
-    paymentStatus: 'Paid',
-    totalAmount: '$550.00',
-    paymentMethod: 'PayPal',
-  },
-  {
-    invoice: '6',
-    paymentStatus: 'Pending',
-    totalAmount: '$200.00',
-    paymentMethod: 'Bank Transfer',
-  },
-  {
-    invoice: '7',
-    paymentStatus: 'Unpaid',
-    totalAmount: '$300.00',
-    paymentMethod: 'Credit Card',
-  },
-];
+const queryClient = new QueryClient();
 
 export default function Home() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RankingComponent />
+    </QueryClientProvider>
+  );
+}
+
+const RankingComponent = () => {
+  const { data: rankings, error, isLoading } = useRankingQuery();
+
   return (
     <div>
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -61,26 +32,34 @@ export default function Home() {
       <p className="leading-7 [&:not(:first-child)]:mt-2 mb-6">
         감자 만화는 일별 랭크를 제공합니다.
       </p>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>순위</TableHead>
-            <TableHead>이름</TableHead>
-            <TableHead>애니 여부</TableHead>
-            <TableHead>만화책 여부</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell>{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell>{invoice.totalAmount}</TableCell>
+      {isLoading && <div>Loading...</div>}
+      {error && <div>Error: {error.message}</div>}
+      {rankings && (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>순위</TableHead>
+              <TableHead>이름</TableHead>
+              <TableHead>점수</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {Object.entries(rankings)
+              .map(([name, score]) => ({
+                name,
+                score,
+              }))
+              .sort((a, b) => Number(b.score) - Number(a.score))
+              .map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{String(item.score)}</TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
-}
+};

@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 const get = async ({ date = dayjs().format("YYYY-MM-DD") }) => {
   const { data, error } = await supabase
     .schema("ani")
-    .from("daily")
+    .from("yearly")
     .select("*")
     .eq("date", date);
 
@@ -18,12 +18,7 @@ const get = async ({ date = dayjs().format("YYYY-MM-DD") }) => {
 };
 
 const post = async ({ date = dayjs().format("YYYY-MM-DD"), json = {} }) => {
-  // json 이 빈 경우는 저장하지 않음
-  if (Object.keys(json).length === 0) {
-    throw new Error("Empty json data");
-  }
-
-  const { error } = await supabase.schema("ani").from("daily").upsert({
+  const { error } = await supabase.schema("ani").from("yearly").upsert({
     date,
     json,
   });
@@ -35,9 +30,9 @@ const post = async ({ date = dayjs().format("YYYY-MM-DD"), json = {} }) => {
   }
 };
 
-const daily = {
+const yearly = {
   get,
   post,
 };
 
-export default daily;
+export default yearly;
