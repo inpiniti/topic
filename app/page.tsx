@@ -1,4 +1,3 @@
-import { Card } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -23,13 +22,13 @@ const invoices = [
   },
   {
     invoice: '3',
-    paymentStatus: 'Unpaid',
+    paymentStatus: '나루토',
     totalAmount: '$350.00',
     paymentMethod: 'Bank Transfer',
   },
   {
     invoice: '4',
-    paymentStatus: 'Paid',
+    paymentStatus: '원피스',
     totalAmount: '$450.00',
     paymentMethod: 'Credit Card',
   },
@@ -62,28 +61,26 @@ export default function Home() {
       <p className="leading-7 [&:not(:first-child)]:mt-2 mb-6">
         감자 만화는 일별 랭크를 제공합니다.
       </p>
-      <Card>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>순위</TableHead>
-              <TableHead>이름</TableHead>
-              <TableHead>애니 여부</TableHead>
-              <TableHead>만화책 여부</TableHead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>순위</TableHead>
+            <TableHead>이름</TableHead>
+            <TableHead>애니 여부</TableHead>
+            <TableHead>만화책 여부</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {invoices.map((invoice) => (
+            <TableRow key={invoice.invoice}>
+              <TableCell>{invoice.invoice}</TableCell>
+              <TableCell>{invoice.paymentStatus}</TableCell>
+              <TableCell>{invoice.paymentMethod}</TableCell>
+              <TableCell>{invoice.totalAmount}</TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {invoices.map((invoice) => (
-              <TableRow key={invoice.invoice}>
-                <TableCell>{invoice.invoice}</TableCell>
-                <TableCell>{invoice.paymentStatus}</TableCell>
-                <TableCell>{invoice.paymentMethod}</TableCell>
-                <TableCell>{invoice.totalAmount}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Card>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
