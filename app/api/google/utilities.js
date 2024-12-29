@@ -1,7 +1,5 @@
 "use strict";
 
-import { ConstructionIcon } from "lucide-react";
-
 export function isLessThan7Days(date1, date2) {
   return Math.abs(date2 - date1) / (24 * 60 * 60 * 1000) < 7;
 }
@@ -183,6 +181,7 @@ export function formatComparisonItems(obj) {
     let items = obj.keyword.reduce((arr, keyword) => {
       // Add the keyword to the array
       const { category, ...rest } = obj;
+      console.log("category", category);
       arr.push({ ...rest, keyword });
 
       return arr;
@@ -322,6 +321,7 @@ export function getInterestResults(request) {
 
           return results;
         } catch (e) {
+          throw e;
           /** throws if not valid JSON, so just return unaltered res string */
           return res;
         }
@@ -372,6 +372,7 @@ export function getTrendingResults(request) {
         /** JSON.parse will decode unicode */
         return JSON.stringify(JSON.parse(res.slice(5)));
       } catch (e) {
+        throw e;
         /** throws if not valid JSON, so just return unaltered res string */
         return res;
       }

@@ -27,7 +27,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useDateStore } from "@/app/store/dateStore";
-import { useRankingQuery } from "@/app/query/rankingQuery";
 
 // This is sample data.
 const data = {
@@ -184,7 +183,6 @@ const CalendarComponent = () => {
 
   // 날짜 변경
   const handleDateChange = (date: Date) => {
-    console.log("handleDateChange");
     setDate(date);
   };
 

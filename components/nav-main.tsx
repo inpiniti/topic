@@ -18,7 +18,6 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import useRangeStore from "@/app/store/rangeStore";
-import { useRankingQuery } from "@/app/query/rankingQuery";
 
 export function NavMain({
   items,
