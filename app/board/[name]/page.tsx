@@ -40,7 +40,8 @@ const topics = [
   },
 ];
 
-export default function Board({ name }: { name: string }) {
+export default function Board({ params }: { params: { name: string } }) {
+  const { name } = params;
   const decodedName = decodeURIComponent(name);
 
   return (
