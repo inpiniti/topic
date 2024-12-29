@@ -4,7 +4,7 @@ const getListFromSupabase = async () => {
   const { data, error } = await supabase
     .schema("ani")
     .from("ani_list")
-    .select("*");
+    .select("name");
 
   if (error) {
     throw new Error(

@@ -2,9 +2,9 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 import { NextRequest, NextResponse } from "next/server";
-import googleTrends from "google-trends-api";
+//import googleTrends from "google-trends-api";
 
-//import googleTrends from "./index";
+import googleTrends from "./index";
 
 import supabase from "@/app/supabase";
 import dayjs from "dayjs";
@@ -91,7 +91,6 @@ const getTrends = async ({ date, range }: { date: string; range: string }) => {
 
     // ani 목록
     const keywords = [...ani_name_list];
-    console.log("keywords", keywords);
 
     // 5개씩 비교 하고
     // 비교한 녀석들 중에서도 5개씩 비교
@@ -99,10 +98,8 @@ const getTrends = async ({ date, range }: { date: string; range: string }) => {
     let maxKeywords = [];
     let nextKeywords = keywords;
     while (nextKeywords.length > 0) {
-      console.log("nextKeywords", nextKeywords);
       // 현재 키워드
       const currentKeywords = nextKeywords.slice(0, 5);
-      console.log("currentKeywords", currentKeywords);
       // 남은 키워드
       nextKeywords = nextKeywords.filter(
         (keyword) =>
@@ -117,7 +114,7 @@ const getTrends = async ({ date, range }: { date: string; range: string }) => {
 
       console.log("인기있는 키워드", keyword);
 
-      maxKeywords.push(keyword);
+      if (keyword) maxKeywords.push(keyword);
 
       // 남은 키워드가 없으면 maxKeywords 가 1개 이상이면
       // nextKeywords 에 maxKeywords를 추가하고,
@@ -183,13 +180,11 @@ const getKeyword = async ({
     keyword: keywords,
     startTime,
     endTime,
-    geo: geo.미국,
+    geo: geo.한국,
     //category: 316,
   };
 
   const trendsData = await googleTrends.interestOverTime(payload);
-
-  console.log("trendsData", trendsData);
 
   const parsedData = JSON.parse(trendsData);
 
@@ -226,7 +221,7 @@ const getAverages = async ({
     keyword: keywords,
     startTime,
     endTime,
-    geo: geo.미국,
+    geo: geo.한국,
     //category: 316,
   };
 

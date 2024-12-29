@@ -1,4 +1,7 @@
 "use strict";
+
+import { ConstructionIcon } from "lucide-react";
+
 export function isLessThan7Days(date1, date2) {
   return Math.abs(date2 - date1) / (24 * 60 * 60 * 1000) < 7;
 }
@@ -104,8 +107,8 @@ export function constructInterestObj(obj, cbFunc) {
 
   obj = validateObj(obj, cbFunc);
 
-  if (!obj.hl) obj.hl = "en-US";
-  if (!obj.category) obj.category = 0;
+  if (!obj.hl) obj.hl = "ko";
+  if (!obj.category) obj.category = 316;
   if (!obj.timezone) obj.timezone = new Date().getTimezoneOffset();
 
   const possibleProperties = ["images", "news", "youtube", "froogle", ""];
@@ -269,6 +272,28 @@ export function getInterestResults(request) {
         let req = resultObj.request;
         const token = resultObj.token;
 
+        function replaceBrokenKeywords(json, keywords) {
+          return {
+            ...json,
+            comparisonItem: json.comparisonItem.map((item, index) => {
+              return {
+                ...item,
+                complexKeywordsRestriction: {
+                  ...item.complexKeywordsRestriction,
+                  keyword: [
+                    {
+                      type: "BROAD",
+                      value: keywords[index],
+                    },
+                  ],
+                },
+              };
+            }),
+          };
+        }
+
+        req = replaceBrokenKeywords(req, obj.keyword);
+
         if (resolution) req.resolution = resolution;
         req.requestOptions.category = obj.category;
         req.requestOptions.property = obj.property;
@@ -366,7 +391,7 @@ export function constructTrendingObj(obj, cbFunc) {
 
     const date = new Date();
     const defaults = {
-      hl: "en-US",
+      hl: "ko",
       category: "all",
       timezone: date.getTimezoneOffset(),
       trendDate: date,

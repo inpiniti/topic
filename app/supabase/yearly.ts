@@ -5,7 +5,7 @@ const get = async ({ date = dayjs().format("YYYY-MM-DD") }) => {
   const { data, error } = await supabase
     .schema("ani")
     .from("yearly")
-    .select("*")
+    .select("json")
     .eq("date", date);
 
   if (error) {
