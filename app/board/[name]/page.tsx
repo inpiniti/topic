@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const topics = [
   {
@@ -40,9 +41,10 @@ const topics = [
   },
 ];
 
-export default function Board({ params }: { params: { name: string } }) {
+export default function Board() {
+  const params = useParams();
   const { name } = params;
-  const decodedName = decodeURIComponent(name);
+  const decodedName = decodeURIComponent(String(name));
 
   return (
     <div className="flex flex-col gap-2">
