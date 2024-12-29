@@ -8,72 +8,75 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRankingQuery } from "./query/rankingQuery";
 import { useDateStore } from "./store/dateStore";
 import dayjs from "dayjs";
 import useRangeStore from "./store/rangeStore";
 import { useMemo } from "react";
+import { useTopicQuery } from "./query/topicQuery";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   return <RankingComponent />;
 }
 
 const RankingComponent = () => {
-  const { data: rankings, error, isLoading } = useRankingQuery();
-  const { range }: { range: keyof typeof RANGE_NAME } = useRangeStore();
+  const { data: topics, error, isLoading } = useTopicQuery();
+  const { range } = useRangeStore();
   const { date } = useDateStore();
+  const router = useRouter();
 
-  const RANGE_NAME = {
-    daily: "일",
-    monthly: "월",
-    yearly: "년",
-  };
-
-  const formattedDate = useMemo(() => {
+  const displayTitle = useMemo(() => {
     switch (range) {
       case "daily":
         return dayjs(date).format("YYYY-MM-DD");
-      case "monthly":
-        return dayjs(date).format("YYYY-MM");
-      case "yearly":
-        return dayjs(date).format("YYYY");
+      case "realtime":
+        return "실시간";
     }
   }, [date, range]);
+
+  // 게시판으로 이동
+  const goToBoard = (topic: string) => {
+    router.push(`/board/${topic}`);
+  };
 
   return (
     <div>
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        {formattedDate}
-        {RANGE_NAME[range]} 랭크
+        {displayTitle} TOPIC
       </h1>
       <p className="leading-7 [&:not(:first-child)]:mt-2 mb-6">
-        감자 만화는 일별 랭크를 제공합니다.
+        아래 토픽을 선택하면 관련 게시물을 확인 할 수 있습니다.
       </p>
       {isLoading && <div>Loading...</div>}
       {error && <div>Error: {JSON.stringify(error)}</div>}
-      {rankings && (
+      {topics && (
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>순위</TableHead>
-              <TableHead>이름</TableHead>
-              <TableHead>점수</TableHead>
+              <TableHead>topic</TableHead>
+              <TableHead>관련 topic</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Object.entries(rankings)
-              .map(([name, score]) => ({
-                name,
-                score,
-              }))
-              .sort((a, b) => Number(b.score) - Number(a.score))
-              .map((item, index) => (
-                <TableRow key={index}>
+            {topics.map(
+              (
+                topic: {
+                  topic: string;
+                  relatedTopics: string[];
+                },
+                index: number
+              ) => (
+                <TableRow key={index} onClick={() => goToBoard(topic.topic)}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{String(item.score)}</TableCell>
+                  <TableCell>{topic.topic}</TableCell>
+                  <TableCell>
+                    {topic.relatedTopics.slice(0, 5).join(", ")}
+                    {topic.relatedTopics.length > 5 && " ..."}
+                  </TableCell>
                 </TableRow>
-              ))}
+              )
+            )}
           </TableBody>
         </Table>
       )}

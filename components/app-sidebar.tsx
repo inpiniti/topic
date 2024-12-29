@@ -13,7 +13,6 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
@@ -76,7 +75,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent className="divide-y border-t">
         <CalendarComponent />
         <NavMain />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>footer</SidebarFooter>
       <SidebarRail />

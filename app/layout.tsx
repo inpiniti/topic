@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { QueryClient, QueryClientProvider } from "react-query";
+import useRangeStore from "./store/rangeStore";
+import { useMemo } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +38,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { range } = useRangeStore();
+  const displayRange = useMemo(() => {
+    switch (range) {
+      case "daily":
+        return "일별 Topics";
+      case "realtime":
+        return "실시간 Topics";
+    }
+  }, [range]);
+
   return (
     <html lang="en">
       <body
@@ -52,11 +64,11 @@ export default function RootLayout({
                   <Breadcrumb>
                     <BreadcrumbList>
                       <BreadcrumbItem className="hidden md:block">
-                        <BreadcrumbLink href="#">랭크</BreadcrumbLink>
+                        <BreadcrumbLink href="#">TOPIC</BreadcrumbLink>
                       </BreadcrumbItem>
                       <BreadcrumbSeparator className="hidden md:block" />
                       <BreadcrumbItem>
-                        <BreadcrumbPage>일별 랭크</BreadcrumbPage>
+                        <BreadcrumbPage>{displayRange}</BreadcrumbPage>
                       </BreadcrumbItem>
                     </BreadcrumbList>
                   </Breadcrumb>

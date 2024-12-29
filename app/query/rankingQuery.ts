@@ -1,7 +1,7 @@
-import { useQuery } from "react-query";
-import useRangeStore from "../store/rangeStore";
-import { useDateStore } from "../store/dateStore";
-import dayjs from "dayjs";
+// import { useQuery } from "react-query";
+// import useRangeStore from "../store/rangeStore";
+// import { useDateStore } from "../store/dateStore";
+// import dayjs from "dayjs";
 
 export const fetchRanking = async ({
   range,
@@ -28,17 +28,16 @@ export const fetchRanking = async ({
 };
 
 export const useRankingQuery = () => {
-  const { range } = useRangeStore();
-  const { date } = useDateStore();
-
-  return useQuery({
-    queryKey: ["ranking", range, date],
-    queryFn: () =>
-      fetchRanking({
-        range,
-        date: dayjs(date).format("YYYY-MM-DD"),
-      }),
-    enabled: !!range && !!date,
-    retry: 0,
-  });
+  // const { range } = useRangeStore();
+  // const { date } = useDateStore();
+  // return useQuery({
+  //   queryKey: ["ranking", range, date],
+  //   queryFn: () =>
+  //     fetchRanking({
+  //       range,
+  //       date: dayjs(date).format("YYYY-MM-DD"),
+  //     }),
+  //   enabled: !!range && !!date,
+  //   retry: 0,
+  // });
 };

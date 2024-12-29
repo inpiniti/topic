@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 const get = async ({ date = dayjs().format("YYYY-MM-DD") }) => {
   const { data, error } = await supabase
-    .schema("ani")
+    .schema("topic")
     .from("monthly")
     .select("json")
     .eq("date", date);
@@ -23,7 +23,7 @@ const post = async ({ date = dayjs().format("YYYY-MM-DD"), json = {} }) => {
     throw new Error("Empty json data");
   }
 
-  const { error } = await supabase.schema("ani").from("monthly").upsert({
+  const { error } = await supabase.schema("topic").from("monthly").upsert({
     date,
     json,
   });

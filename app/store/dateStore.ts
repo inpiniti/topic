@@ -15,12 +15,10 @@ interface DateState {
 export const useDateStore = create<DateState>()(
   devtools(
     (set) => ({
-      date: dayjs().subtract(1, "day").toDate(),
+      date: dayjs(),
       setDate: (date: Date) =>
         set({
-          date: dayjs(date).isSameOrAfter(dayjs(), "day")
-            ? dayjs().subtract(1, "day").toDate()
-            : date,
+          date,
         }),
     }),
     {

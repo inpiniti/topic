@@ -106,7 +106,7 @@ export function constructInterestObj(obj, cbFunc) {
   obj = validateObj(obj, cbFunc);
 
   if (!obj.hl) obj.hl = "ko";
-  if (!obj.category) obj.category = 316;
+  if (!obj.category) obj.category = 0;
   if (!obj.timezone) obj.timezone = new Date().getTimezoneOffset();
 
   const possibleProperties = ["images", "news", "youtube", "froogle", ""];
@@ -271,27 +271,28 @@ export function getInterestResults(request) {
         let req = resultObj.request;
         const token = resultObj.token;
 
-        function replaceBrokenKeywords(json, keywords) {
-          return {
-            ...json,
-            comparisonItem: json.comparisonItem.map((item, index) => {
-              return {
-                ...item,
-                complexKeywordsRestriction: {
-                  ...item.complexKeywordsRestriction,
-                  keyword: [
-                    {
-                      type: "BROAD",
-                      value: keywords[index],
-                    },
-                  ],
-                },
-              };
-            }),
-          };
-        }
+        // function replaceBrokenKeywords(json, keywords) {
+        //   console.log("json", json);
+        //   return {
+        //     ...json,
+        //     comparisonItem: json.comparisonItem.map((item, index) => {
+        //       return {
+        //         ...item,
+        //         complexKeywordsRestriction: {
+        //           ...item.complexKeywordsRestriction,
+        //           keyword: [
+        //             {
+        //               type: "BROAD",
+        //               value: keywords[index],
+        //             },
+        //           ],
+        //         },
+        //       };
+        //     }),
+        //   };
+        // }
 
-        req = replaceBrokenKeywords(req, obj.keyword);
+        // req = replaceBrokenKeywords(req, obj.keyword);
 
         if (resolution) req.resolution = resolution;
         req.requestOptions.category = obj.category;
@@ -311,6 +312,8 @@ export function getInterestResults(request) {
         };
 
         if (obj.agent) nextOptions.agent = obj.agent;
+
+        console.log("nextOptions", nextOptions);
 
         return request(nextOptions);
       })
@@ -367,8 +370,11 @@ export function getTrendingResults(request) {
 
     options.qs = { ...options.qs, ...searchTypeMap[searchType].extraParams };
 
+    console.log("options", options);
+
     return request(options).then((res) => {
       try {
+        console.log("res", res);
         /** JSON.parse will decode unicode */
         return JSON.stringify(JSON.parse(res.slice(5)));
       } catch (e) {
