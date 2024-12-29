@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 import {
   Collapsible,
@@ -165,7 +165,7 @@ const RangeComponent = ({
         <SidebarMenuSubItem key={subItem.title}>
           <SidebarMenuSubButton asChild>
             <a
-              onClick={() => handleRangeChange(subItem.key)}
+              onClick={() => handleRangeChange(String(subItem?.key))}
               className={`${
                 range === subItem.key ? "bg-black text-white" : ""
               } cursor-pointer`}
