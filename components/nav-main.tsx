@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { ChevronRight, type LucideIcon } from 'lucide-react';
+import { ChevronRight, type LucideIcon } from "lucide-react";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,7 +16,9 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from '@/components/ui/sidebar';
+} from "@/components/ui/sidebar";
+import useRangeStore from "@/app/store/rangeStore";
+import { useRankingQuery } from "@/app/query/rankingQuery";
 
 export function NavMain({
   items,
@@ -28,6 +30,7 @@ export function NavMain({
     isActive?: boolean;
     items?: {
       title: string;
+      key: string;
       url: string;
     }[];
   }[];
@@ -52,17 +55,7 @@ export function NavMain({
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
+                <RangeComponent items={item.items} />
               </CollapsibleContent>
             </SidebarMenuItem>
           </Collapsible>
@@ -71,3 +64,31 @@ export function NavMain({
     </SidebarGroup>
   );
 }
+
+const RangeComponent = (item) => {
+  const { range, setRange } = useRangeStore();
+  // 범위 변경
+  const handleRangeChange = (key: string) => {
+    console.log("handleRangeChange");
+    setRange(key);
+  };
+
+  return (
+    <SidebarMenuSub>
+      {item.items?.map((subItem) => (
+        <SidebarMenuSubItem key={subItem.title}>
+          <SidebarMenuSubButton asChild>
+            <a
+              onClick={() => handleRangeChange(subItem.key)}
+              className={`${
+                range === subItem.key ? "bg-black text-white" : ""
+              } cursor-pointer`}
+            >
+              <span>{subItem.title}</span>
+            </a>
+          </SidebarMenuSubButton>
+        </SidebarMenuSubItem>
+      ))}
+    </SidebarMenuSub>
+  );
+};

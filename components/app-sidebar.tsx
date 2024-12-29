@@ -27,6 +27,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useDateStore } from "@/app/store/dateStore";
+import { useRankingQuery } from "@/app/query/rankingQuery";
 
 // This is sample data.
 const data = {
@@ -61,10 +62,17 @@ const data = {
       items: [
         {
           title: "일별랭크",
+          key: "daily",
           url: "#",
         },
         {
           title: "월별랭크",
+          key: "monthly",
+          url: "#",
+        },
+        {
+          title: "연간랭크",
+          key: "yearly",
           url: "#",
         },
       ],
@@ -155,15 +163,13 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { date, setDate } = useDateStore();
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent className="divide-y border-t">
-        <Calendar mode="single" selected={date} onSelect={setDate} />
+        <CalendarComponent />
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
       </SidebarContent>
@@ -172,3 +178,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     </Sidebar>
   );
 }
+
+const CalendarComponent = () => {
+  const { date, setDate } = useDateStore();
+
+  // 날짜 변경
+  const handleDateChange = (date: Date) => {
+    console.log("handleDateChange");
+    setDate(date);
+  };
+
+  return <Calendar mode="single" selected={date} onSelect={handleDateChange} />;
+};

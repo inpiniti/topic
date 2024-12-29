@@ -18,6 +18,11 @@ const get = async ({ date = dayjs().format("YYYY-MM-DD") }) => {
 };
 
 const post = async ({ date = dayjs().format("YYYY-MM-DD"), json = {} }) => {
+  // json 이 빈 경우는 저장하지 않음
+  if (Object.keys(json).length === 0) {
+    throw new Error("Empty json data");
+  }
+
   const { error } = await supabase.schema("ani").from("monthly").upsert({
     date,
     json,

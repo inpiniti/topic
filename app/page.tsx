@@ -9,25 +9,42 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRankingQuery } from "./query/rankingQuery";
-import { QueryClient, QueryClientProvider } from "react-query";
-
-const queryClient = new QueryClient();
+import { useDateStore } from "./store/dateStore";
+import dayjs from "dayjs";
+import useRangeStore from "./store/rangeStore";
+import { useMemo } from "react";
 
 export default function Home() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <RankingComponent />
-    </QueryClientProvider>
-  );
+  return <RankingComponent />;
 }
 
 const RankingComponent = () => {
   const { data: rankings, error, isLoading } = useRankingQuery();
+  const { range }: { range: keyof typeof RANGE_NAME } = useRangeStore();
+  const { date } = useDateStore();
+
+  const RANGE_NAME = {
+    daily: "일",
+    monthly: "월",
+    yearly: "년",
+  };
+
+  const formattedDate = useMemo(() => {
+    switch (range) {
+      case "daily":
+        return dayjs(date).format("YYYY-MM-DD");
+      case "monthly":
+        return dayjs(date).format("YYYY-MM");
+      case "yearly":
+        return dayjs(date).format("YYYY");
+    }
+  }, [date, range]);
 
   return (
     <div>
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        일별 랭크
+        {formattedDate}
+        {RANGE_NAME[range]} 랭크
       </h1>
       <p className="leading-7 [&:not(:first-child)]:mt-2 mb-6">
         감자 만화는 일별 랭크를 제공합니다.

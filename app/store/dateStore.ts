@@ -1,7 +1,11 @@
 // src/store/day.ts
 import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+
+// dayjs 플러그인 확장
+dayjs.extend(isSameOrAfter);
 
 interface DateState {
   date: Date;
@@ -11,8 +15,13 @@ interface DateState {
 export const useDateStore = create<DateState>()(
   devtools(
     (set) => ({
-      date: dayjs(),
-      setDate: (date: Date) => set({ date }),
+      date: dayjs().subtract(1, "day").toDate(),
+      setDate: (date: Date) =>
+        set({
+          date: dayjs(date).isSameOrAfter(dayjs(), "day")
+            ? dayjs().subtract(1, "day").toDate()
+            : date,
+        }),
     }),
     {
       name: "date",
