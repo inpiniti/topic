@@ -89,14 +89,3 @@ export default function Board({ params }: { params: { name: string } }) {
     </div>
   );
 }
-
-export async function generateStaticParams(context: {
-  params: { name: string };
-}) {
-  const { name } = context.params!;
-  return {
-    props: {
-      name,
-    },
-  };
-}
