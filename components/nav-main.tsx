@@ -54,7 +54,7 @@ export function NavMain({
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <RangeComponent items={item.items} />
+                <RangeComponent items={item.items || []} />
               </CollapsibleContent>
             </SidebarMenuItem>
           </Collapsible>
@@ -64,7 +64,16 @@ export function NavMain({
   );
 }
 
-const RangeComponent = (item) => {
+const RangeComponent = ({
+  items,
+}: {
+  items:
+    | {
+        title: string;
+        key: string;
+        url: string;
+      }[];
+}) => {
   const { range, setRange } = useRangeStore();
   // 범위 변경
   const handleRangeChange = (key: string) => {
@@ -74,7 +83,7 @@ const RangeComponent = (item) => {
 
   return (
     <SidebarMenuSub>
-      {item.items?.map((subItem) => (
+      {items?.map((subItem) => (
         <SidebarMenuSubItem key={subItem.title}>
           <SidebarMenuSubButton asChild>
             <a

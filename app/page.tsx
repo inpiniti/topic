@@ -50,7 +50,7 @@ const RankingComponent = () => {
         감자 만화는 일별 랭크를 제공합니다.
       </p>
       {isLoading && <div>Loading...</div>}
-      {error && <div>Error: {error.message}</div>}
+      {error && <div>Error: {JSON.stringify(error)}</div>}
       {rankings && (
         <Table>
           <TableHeader>

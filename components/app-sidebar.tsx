@@ -182,8 +182,10 @@ const CalendarComponent = () => {
   const { date, setDate } = useDateStore();
 
   // 날짜 변경
-  const handleDateChange = (date: Date) => {
-    setDate(date);
+  const handleDateChange = (date: Date | undefined) => {
+    if (date) {
+      setDate(date);
+    }
   };
 
   return <Calendar mode="single" selected={date} onSelect={handleDateChange} />;
