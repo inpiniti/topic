@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const topics = [
   {
@@ -42,8 +43,9 @@ const topics = [
   },
 ];
 
-export default function Board({ params }: { params: { name: string } }) {
-  const { name } = params;
+export default function Board() {
+  const params = useParams();
+  const name = params.name as string;
   const decodedName = decodeURIComponent(name);
 
   return (
