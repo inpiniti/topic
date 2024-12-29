@@ -7,8 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 
 const topics = [
   {
@@ -41,10 +41,8 @@ const topics = [
   },
 ];
 
-export default function Board() {
-  const params = useParams();
-  const { name } = params;
-  const decodedName = decodeURIComponent(String(name));
+export default function Board({ name }: { name: string }) {
+  const decodedName = decodeURIComponent(name);
 
   return (
     <div className="flex flex-col gap-2">
@@ -91,3 +89,12 @@ export default function Board() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { name } = context.params!;
+  return {
+    props: {
+      name,
+    },
+  };
+};
