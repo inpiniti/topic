@@ -18,27 +18,105 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import useRangeStore from "@/app/store/rangeStore";
+import { BookOpen, Bot, Settings2, SquareTerminal } from "lucide-react";
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
-    items?: {
-      title: string;
-      key: string;
-      url: string;
-    }[];
-  }[];
-}) {
+const navMain = [
+  {
+    title: "랭크",
+    url: "#",
+    icon: SquareTerminal,
+    isActive: true,
+    items: [
+      {
+        title: "일별랭크",
+        key: "daily",
+        url: "#",
+      },
+      {
+        title: "월별랭크",
+        key: "monthly",
+        url: "#",
+      },
+      {
+        title: "연간랭크",
+        key: "yearly",
+        url: "#",
+      },
+    ],
+  },
+  {
+    title: "Models",
+    url: "#",
+    icon: Bot,
+    items: [
+      {
+        title: "Genesis",
+        url: "#",
+      },
+      {
+        title: "Explorer",
+        url: "#",
+      },
+      {
+        title: "Quantum",
+        url: "#",
+      },
+    ],
+  },
+  {
+    title: "Documentation",
+    url: "#",
+    icon: BookOpen,
+    items: [
+      {
+        title: "Introduction",
+        url: "#",
+      },
+      {
+        title: "Get Started",
+        url: "#",
+      },
+      {
+        title: "Tutorials",
+        url: "#",
+      },
+      {
+        title: "Changelog",
+        url: "#",
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    url: "#",
+    icon: Settings2,
+    items: [
+      {
+        title: "General",
+        url: "#",
+      },
+      {
+        title: "Team",
+        url: "#",
+      },
+      {
+        title: "Billing",
+        url: "#",
+      },
+      {
+        title: "Limits",
+        url: "#",
+      },
+    ],
+  },
+];
+
+export function NavMain() {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
+        {navMain.map((item) => (
           <Collapsible
             key={item.title}
             asChild
@@ -70,7 +148,7 @@ const RangeComponent = ({
   items:
     | {
         title: string;
-        key: string;
+        key?: string;
         url: string;
       }[];
 }) => {
