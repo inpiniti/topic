@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { GetServerSideProps } from "next";
 import Link from "next/link";
 
 const topics = [
@@ -90,11 +89,13 @@ export default function Board({ name }: { name: string }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export async function generateStaticParams(context: {
+  params: { name: string };
+}) {
   const { name } = context.params!;
   return {
     props: {
       name,
     },
   };
-};
+}
