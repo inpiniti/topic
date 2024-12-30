@@ -7,7 +7,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import Link from "next/link";
 import { Title } from "./Title";
 
 interface Params {
