@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Table,
@@ -7,13 +7,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useDateStore } from "./store/dateStore";
-import dayjs from "dayjs";
-import useRangeStore from "./store/rangeStore";
-import { useMemo } from "react";
-import { useTopicQuery } from "./query/topicQuery";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/table';
+import { useDateStore } from './store/dateStore';
+import dayjs from 'dayjs';
+import useRangeStore from './store/rangeStore';
+import { useMemo } from 'react';
+import { useTopicQuery } from './query/topicQuery';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   return <RankingComponent />;
@@ -27,10 +27,10 @@ const RankingComponent = () => {
 
   const displayTitle = useMemo(() => {
     switch (range) {
-      case "daily":
-        return dayjs(date).format("YYYY-MM-DD");
-      case "realtime":
-        return "실시간";
+      case 'daily':
+        return dayjs(date).format('YYYY-MM-DD');
+      case 'realtime':
+        return '실시간';
     }
   }, [date, range]);
 
@@ -59,7 +59,7 @@ const RankingComponent = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {topics.map(
+            {topics?.map(
               (
                 topic: {
                   topic: string;
@@ -71,8 +71,8 @@ const RankingComponent = () => {
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{topic.topic}</TableCell>
                   <TableCell>
-                    {topic.relatedTopics.slice(0, 5).join(", ")}
-                    {topic.relatedTopics.length > 5 && " ..."}
+                    {topic.relatedTopics.slice(0, 5).join(', ')}
+                    {topic.relatedTopics.length > 5 && ' ...'}
                   </TableCell>
                 </TableRow>
               )

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+} from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/app-sidebar';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,20 +15,20 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { QueryClient, QueryClientProvider } from "react-query";
-import useRangeStore from "./store/rangeStore";
-import { useMemo } from "react";
+} from '@/components/ui/breadcrumb';
+import { Separator } from '@/components/ui/separator';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import useRangeStore from './store/rangeStore';
+import { useMemo } from 'react';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 const queryClient = new QueryClient();
@@ -41,10 +41,10 @@ export default function RootLayout({
   const { range } = useRangeStore();
   const displayRange = useMemo(() => {
     switch (range) {
-      case "daily":
-        return "일별 Topics";
-      case "realtime":
-        return "실시간 Topics";
+      case 'daily':
+        return '일별 Topics';
+      case 'realtime':
+        return '실시간 Topics';
     }
   }, [range]);
 
