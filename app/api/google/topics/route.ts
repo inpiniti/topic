@@ -44,9 +44,11 @@ export async function GET(request: NextRequest) {
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
-      return NextResponse.json({ error: error.message });
+      console.error(error.message);
+      return NextResponse.json([]);
     } else {
-      return NextResponse.json({ error: error });
+      console.error(error);
+      return NextResponse.json([]);
     }
   }
 }
