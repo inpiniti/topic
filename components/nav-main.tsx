@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { ChevronRight } from "lucide-react";
+import { ChevronRight } from 'lucide-react';
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from '@/components/ui/collapsible';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,51 +16,42 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
-import useRangeStore from "@/app/store/rangeStore";
-import { SquareTerminal, Bot } from "lucide-react";
-
-const navMain = [
-  {
-    title: "Topics",
-    url: "#",
-    icon: SquareTerminal,
-    isActive: true,
-    items: [
-      {
-        title: "실시간 Topics",
-        key: "realtime",
-        url: "#",
-      },
-      {
-        title: "일별 Topics",
-        key: "daily",
-        url: "#",
-      },
-    ],
-  },
-  {
-    title: "실시간 Topics",
-    url: "#",
-    icon: Bot,
-    items: [
-      {
-        title: "aa",
-        url: "#",
-      },
-      {
-        title: "bb",
-        url: "#",
-      },
-      {
-        title: "cc",
-        url: "#",
-      },
-    ],
-  },
-];
+} from '@/components/ui/sidebar';
+import useRangeStore from '@/app/store/rangeStore';
+import { MessageCircle, TableOfContents } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useDateStore } from '@/app/store/dateStore';
+import dayjs from 'dayjs';
 
 export function NavMain() {
+  const { date } = useDateStore();
+
+  const navMain = [
+    {
+      title: 'Topics',
+      url: '#',
+      icon: MessageCircle,
+      isActive: true,
+      items: [
+        {
+          title: '실시간 Topics',
+          key: 'realtime',
+          url: '/topic/realtime',
+        },
+        {
+          title: '일별 Topics',
+          key: 'daily',
+          url: `/topic/daily/${dayjs(date).format('YYYY-MM-DD')}`,
+        },
+      ],
+    },
+    {
+      title: '게시판',
+      url: '#',
+      icon: TableOfContents,
+    },
+  ];
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -77,7 +68,9 @@ export function NavMain() {
                 <SidebarMenuButton tooltip={item.title}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  {item.items && (
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  )}
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
@@ -102,10 +95,11 @@ const RangeComponent = ({
       }[];
 }) => {
   const { range, setRange } = useRangeStore();
+  const router = useRouter();
   // 범위 변경
-  const handleRangeChange = (key: string) => {
-    console.log("handleRangeChange");
+  const handleRangeChange = (key: string, url: string) => {
     setRange(key);
+    router.push(url);
   };
 
   return (
@@ -114,9 +108,13 @@ const RangeComponent = ({
         <SidebarMenuSubItem key={subItem.title}>
           <SidebarMenuSubButton asChild>
             <a
-              onClick={() => handleRangeChange(String(subItem?.key))}
+              onClick={() =>
+                handleRangeChange(String(subItem?.key), subItem.url)
+              }
               className={`${
-                range === subItem.key ? "bg-black text-white" : ""
+                range === subItem.key
+                  ? 'bg-black hover:bg-neutral-700 text-white hover:text-white'
+                  : ''
               } cursor-pointer`}
             >
               <span>{subItem.title}</span>
