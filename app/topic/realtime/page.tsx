@@ -7,28 +7,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-interface Params {
-  date: string;
-}
-
-export default async function DailyComponent({
-  params,
-}: {
-  params: Promise<Params>;
-}) {
-  const { date } = await params;
-
-  if (!date) {
-    return <div>에러: 날짜 파라미터가 누락되었습니다.</div>;
-  }
-
-  if (!process.env.NEXT_PUBLIC_API_URL) {
-    return <div>에러: API URL이 정의되지 않았습니다.</div>;
-  }
-
+export default async function DailyComponent() {
   const payload = {
     range: 'realtime',
-    date,
   };
   const queryParams = new URLSearchParams(payload).toString();
   const response = await fetch(
