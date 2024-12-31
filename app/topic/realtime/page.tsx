@@ -51,13 +51,26 @@ export default async function DailyComponent() {
               ) => (
                 <TableRow key={index}>
                   <TableCell>
-                    <a href={`/board/${topic.topic}`}>{index + 1}</a>
+                    <a
+                      href={`/board/${topic.topic}`}
+                      className="hover:text-blue-500"
+                    >
+                      {index + 1}
+                    </a>
                   </TableCell>
                   <TableCell>
-                    <a href={`/board/${topic.topic}`}>{topic.topic}</a>
+                    <a
+                      href={`/board/${topic.topic}`}
+                      className="hover:text-blue-500"
+                    >
+                      {topic.topic}
+                    </a>
                   </TableCell>
                   <TableCell>
-                    <a href={`/board/${topic.topic}`}>
+                    <a
+                      href={`/board/${topic.topic}`}
+                      className="hover:text-blue-500"
+                    >
                       {topic.relatedTopics.slice(0, 5).join(', ')}
                       {topic.relatedTopics.length > 5 && ' ...'}
                     </a>

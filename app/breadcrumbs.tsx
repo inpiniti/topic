@@ -30,28 +30,52 @@ export default function Breadcrumbs() {
         <BreadcrumbItem>
           <BreadcrumbLink href="/">home</BreadcrumbLink>
         </BreadcrumbItem>
-        {segments[1] && <BreadcrumbSeparator />}
-        {segments[1] && (
+        {segments[0] && <BreadcrumbSeparator />}
+        {segments[0] && (
           <BreadcrumbItem>
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-1">
-                {segments[1]}
+                {segments[0]}
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
                 <DropdownMenuItem>
-                  <BreadcrumbLink href="/topic/realtime">
-                    realtime
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="/topic/realtime">topic</BreadcrumbLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <BreadcrumbLink
-                    href={`/topic/daily/${dayjs(date).format('YYYY-MM-DD')}`}
-                  >
-                    daily
+                  <BreadcrumbLink href={`/board/감자토픽`}>
+                    board
                   </BreadcrumbLink>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+          </BreadcrumbItem>
+        )}
+        {segments[1] && <BreadcrumbSeparator />}
+        {segments[1] && (
+          <BreadcrumbItem>
+            {segments[0] === 'topic' ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1">
+                  {decodeURIComponent(segments[1])}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  <DropdownMenuItem>
+                    <BreadcrumbLink href="/topic/realtime">
+                      realtime
+                    </BreadcrumbLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <BreadcrumbLink
+                      href={`/topic/daily/${dayjs(date).format('YYYY-MM-DD')}`}
+                    >
+                      daily
+                    </BreadcrumbLink>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              decodeURIComponent(segments[1])
+            )}
           </BreadcrumbItem>
         )}
       </BreadcrumbList>
