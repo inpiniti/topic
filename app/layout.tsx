@@ -29,35 +29,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // page 의 url 이 /topic/daily 이면
-  // <BreadcrumbItem>
-  //   <BreadcrumbLink href="/">home</BreadcrumbLink>
-  // </BreadcrumbItem>
-  // <BreadcrumbSeparator />
-  // <BreadcrumbItem>
-  //   <BreadcrumbPage>daily</BreadcrumbPage>
-  // </BreadcrumbItem>
-
-  // page 의 url 이 /topic/realtime 이면
-  // <BreadcrumbItem>
-  //   <BreadcrumbLink href="/">home</BreadcrumbLink>
-  // </BreadcrumbItem>
-  // <BreadcrumbSeparator />
-  // <BreadcrumbItem>
-  //   <BreadcrumbPage>realtime</BreadcrumbPage>
-  // </BreadcrumbItem>
-
-  // page 의 url 이 /topic/board 이면
-  // <BreadcrumbItem>
-  //   <BreadcrumbLink href="/">home</BreadcrumbLink>
-  // </BreadcrumbItem>
-  // <BreadcrumbSeparator />
-  // <BreadcrumbItem>
-  //   <BreadcrumbPage>board</BreadcrumbPage>
-  // </BreadcrumbItem>
-
-  // 위와 같이 렌더링 되면 좋겠어
-
   return (
     <html lang="en">
       <body

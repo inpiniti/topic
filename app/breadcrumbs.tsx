@@ -15,9 +15,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useDateStore } from './store/dateStore';
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
+  const { date } = useDateStore();
 
   // Split the pathname into segments
   const segments = pathname.split('/').filter(Boolean);
@@ -35,8 +37,18 @@ export default function Breadcrumbs() {
                 {segments[1]}
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem>realtime</DropdownMenuItem>
-                <DropdownMenuItem>daily</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <BreadcrumbLink href="/topic/realtime">
+                    realtime
+                  </BreadcrumbLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <BreadcrumbLink
+                    href={`/topic/daily/${dayjs(date).format('YYYY-MM-DD')}`}
+                  >
+                    daily
+                  </BreadcrumbLink>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </BreadcrumbItem>
