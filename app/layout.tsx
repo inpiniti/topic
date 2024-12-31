@@ -8,18 +8,9 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import useRangeStore from './store/rangeStore';
-import { useMemo } from 'react';
+import Breadcrumbs from './breadcrumbs';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,15 +29,34 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { range } = useRangeStore();
-  const displayRange = useMemo(() => {
-    switch (range) {
-      case 'daily':
-        return '일별 Topics';
-      case 'realtime':
-        return '실시간 Topics';
-    }
-  }, [range]);
+  // page 의 url 이 /topic/daily 이면
+  // <BreadcrumbItem>
+  //   <BreadcrumbLink href="/">home</BreadcrumbLink>
+  // </BreadcrumbItem>
+  // <BreadcrumbSeparator />
+  // <BreadcrumbItem>
+  //   <BreadcrumbPage>daily</BreadcrumbPage>
+  // </BreadcrumbItem>
+
+  // page 의 url 이 /topic/realtime 이면
+  // <BreadcrumbItem>
+  //   <BreadcrumbLink href="/">home</BreadcrumbLink>
+  // </BreadcrumbItem>
+  // <BreadcrumbSeparator />
+  // <BreadcrumbItem>
+  //   <BreadcrumbPage>realtime</BreadcrumbPage>
+  // </BreadcrumbItem>
+
+  // page 의 url 이 /topic/board 이면
+  // <BreadcrumbItem>
+  //   <BreadcrumbLink href="/">home</BreadcrumbLink>
+  // </BreadcrumbItem>
+  // <BreadcrumbSeparator />
+  // <BreadcrumbItem>
+  //   <BreadcrumbPage>board</BreadcrumbPage>
+  // </BreadcrumbItem>
+
+  // 위와 같이 렌더링 되면 좋겠어
 
   return (
     <html lang="en">
@@ -61,17 +71,7 @@ export default function RootLayout({
                 <div className="flex items-center gap-2 px-4">
                   <SidebarTrigger className="-ml-1" />
                   <Separator orientation="vertical" className="mr-2 h-4" />
-                  <Breadcrumb>
-                    <BreadcrumbList>
-                      <BreadcrumbItem className="hidden md:block">
-                        <BreadcrumbLink href="/">home</BreadcrumbLink>
-                      </BreadcrumbItem>
-                      <BreadcrumbSeparator className="hidden md:block" />
-                      <BreadcrumbItem>
-                        <BreadcrumbPage>{displayRange}</BreadcrumbPage>
-                      </BreadcrumbItem>
-                    </BreadcrumbList>
-                  </Breadcrumb>
+                  <Breadcrumbs />
                 </div>
               </header>
               <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
