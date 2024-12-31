@@ -5,9 +5,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 
-import { Title } from "./Title";
+import { Title } from './Title';
 
 interface Params {
   date: string;
@@ -20,16 +20,16 @@ export default async function DailyComponent({
 }) {
   const { date } = await params;
   const payload = {
-    range: "daily",
+    range: 'daily',
     date,
   };
   const queryParams = new URLSearchParams(payload).toString();
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/google/topics?${queryParams}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
   );
@@ -37,7 +37,7 @@ export default async function DailyComponent({
 
   return (
     <div>
-      <Title />
+      <Title date={date} />
       <p className="leading-7 [&:not(:first-child)]:mt-2 mb-6">
         아래 토픽을 선택하면 관련 게시물을 확인 할 수 있습니다.
       </p>
@@ -68,8 +68,8 @@ export default async function DailyComponent({
                   </TableCell>
                   <TableCell>
                     <a href={`/board/${topic.topic}`}>
-                      {topic.relatedTopics.slice(0, 5).join(", ")}
-                      {topic.relatedTopics.length > 5 && " ..."}
+                      {topic.relatedTopics.slice(0, 5).join(', ')}
+                      {topic.relatedTopics.length > 5 && ' ...'}
                     </a>
                   </TableCell>
                 </TableRow>

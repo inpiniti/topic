@@ -21,25 +21,18 @@ export default function Breadcrumbs() {
 
   // Split the pathname into segments
   const segments = pathname.split('/').filter(Boolean);
-
-  // Determine the current page based on the pathname
-  let currentPage = '';
-  if (segments.length === 2) {
-    currentPage = segments[1];
-  }
-
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/">home</BreadcrumbLink>
         </BreadcrumbItem>
-        {currentPage && <BreadcrumbSeparator />}
-        {currentPage && (
+        {segments[1] && <BreadcrumbSeparator />}
+        {segments[1] && (
           <BreadcrumbItem>
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-1">
-                {currentPage}
+                {segments[1]}
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
                 <DropdownMenuItem>realtime</DropdownMenuItem>

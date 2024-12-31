@@ -1,26 +1,32 @@
-"use client";
+'use client';
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { useDateStore } from "@/app/store/dateStore";
-import { Button } from "@/components/ui/button";
-import dayjs from "dayjs";
-import { useRouter } from "next/navigation";
+import { useDateStore } from '@/app/store/dateStore';
+import { Button } from '@/components/ui/button';
+import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
-export const Title = () => {
+export const Title = ({ date: newDate }: { date: string }) => {
   const { date, setDate } = useDateStore();
+
+  useEffect(() => {
+    setDate(new Date(newDate));
+  }, []);
+
   const router = useRouter();
 
   const handlePreviousDayClick = () => {
-    const newDate = dayjs(date).subtract(1, "day").toDate();
+    const newDate = dayjs(date).subtract(1, 'day').toDate();
     setDate(newDate);
-    router.push(`/topic/daily/${dayjs(newDate).format("YYYY-MM-DD")}`);
+    router.push(`/topic/daily/${dayjs(newDate).format('YYYY-MM-DD')}`);
   };
 
   const handleNextDayClick = () => {
-    const newDate = dayjs(date).add(1, "day").toDate();
+    const newDate = dayjs(date).add(1, 'day').toDate();
     setDate(newDate);
-    router.push(`/topic/daily/${dayjs(newDate).format("YYYY-MM-DD")}`);
+    router.push(`/topic/daily/${dayjs(newDate).format('YYYY-MM-DD')}`);
   };
 
   return (
@@ -28,7 +34,7 @@ export const Title = () => {
       <Button onClick={handlePreviousDayClick} variant="ghost">
         <ChevronLeft />
       </Button>
-      {dayjs(date).format("YYYY-MM-DD")}
+      {dayjs(date).format('YYYY-MM-DD')}
       <Button onClick={handleNextDayClick} variant="ghost">
         <ChevronRight />
       </Button>
