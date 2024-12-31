@@ -38,14 +38,15 @@ export default function Breadcrumbs() {
                 {segments[0]}
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem>
-                  <BreadcrumbLink href="/topic/realtime">topic</BreadcrumbLink>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <BreadcrumbLink href={`/board/감자토픽`}>
-                    board
-                  </BreadcrumbLink>
-                </DropdownMenuItem>
+                <BreadcrumbLink
+                  href="/topic/realtime"
+                  className="w-full bg-slate-300"
+                >
+                  <DropdownMenuItem>topic</DropdownMenuItem>
+                </BreadcrumbLink>
+                <BreadcrumbLink href={`/board/감자토픽`} className="w-full">
+                  <DropdownMenuItem>board</DropdownMenuItem>
+                </BreadcrumbLink>
               </DropdownMenuContent>
             </DropdownMenu>
           </BreadcrumbItem>
@@ -59,18 +60,14 @@ export default function Breadcrumbs() {
                   {decodeURIComponent(segments[1])}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                  <DropdownMenuItem>
-                    <BreadcrumbLink href="/topic/realtime">
-                      realtime
-                    </BreadcrumbLink>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <BreadcrumbLink
-                      href={`/topic/daily/${dayjs(date).format('YYYY-MM-DD')}`}
-                    >
-                      daily
-                    </BreadcrumbLink>
-                  </DropdownMenuItem>
+                  <BreadcrumbLink href="/topic/realtime">
+                    <DropdownMenuItem>realtime</DropdownMenuItem>
+                  </BreadcrumbLink>
+                  <BreadcrumbLink
+                    href={`/topic/daily/${dayjs(date).format('YYYY-MM-DD')}`}
+                  >
+                    <DropdownMenuItem>daily</DropdownMenuItem>
+                  </BreadcrumbLink>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (

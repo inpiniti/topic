@@ -60,17 +60,15 @@ export default async function DailyComponent({
                 index: number
               ) => (
                 <TableRow key={index}>
-                  <TableCell>
-                    <a href={`/board/${topic.topic}`}>{index + 1}</a>
+                  <TableCell href={`/board/${topic.topic}`}>
+                    {index + 1}
                   </TableCell>
-                  <TableCell>
-                    <a href={`/board/${topic.topic}`}>{topic.topic}</a>
+                  <TableCell href={`/board/${topic.topic}`}>
+                    {topic.topic}
                   </TableCell>
-                  <TableCell>
-                    <a href={`/board/${topic.topic}`}>
-                      {topic.relatedTopics.slice(0, 5).join(', ')}
-                      {topic.relatedTopics.length > 5 && ' ...'}
-                    </a>
+                  <TableCell href={`/board/${topic.topic}`}>
+                    {topic.relatedTopics.slice(0, 5).join(', ')}
+                    {topic.relatedTopics.length > 5 && ' ...'}
                   </TableCell>
                 </TableRow>
               )
