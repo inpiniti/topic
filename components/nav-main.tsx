@@ -22,6 +22,7 @@ import { MessageCircle, TableOfContents } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useDateStore } from '@/app/store/dateStore';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 
 export function NavMain() {
   const { date } = useDateStore();
@@ -29,7 +30,6 @@ export function NavMain() {
   const navMain = [
     {
       title: 'Topics',
-      url: '#',
       icon: MessageCircle,
       isActive: true,
       items: [
@@ -47,7 +47,7 @@ export function NavMain() {
     },
     {
       title: '게시판',
-      url: '#',
+      url: '/board',
       icon: TableOfContents,
     },
   ];
@@ -65,13 +65,25 @@ export function NavMain() {
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                  {item.items && (
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                  )}
-                </SidebarMenuButton>
+                {item.url ? (
+                  <Link href={item.url}>
+                    <SidebarMenuButton tooltip={item.title}>
+                      {item.icon && <item.icon />}
+                      <span>{item.title}</span>
+                      {item.items && (
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      )}
+                    </SidebarMenuButton>
+                  </Link>
+                ) : (
+                  <SidebarMenuButton tooltip={item.title}>
+                    {item.icon && <item.icon />}
+                    <span>{item.title}</span>
+                    {item.items && (
+                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    )}
+                  </SidebarMenuButton>
+                )}
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <RangeComponent items={item.items || []} />
@@ -106,19 +118,16 @@ const RangeComponent = ({
     <SidebarMenuSub>
       {items?.map((subItem) => (
         <SidebarMenuSubItem key={subItem.title}>
-          <SidebarMenuSubButton asChild>
-            <a
-              onClick={() =>
-                handleRangeChange(String(subItem?.key), subItem.url)
-              }
-              className={`${
-                range === subItem.key
-                  ? 'bg-black hover:bg-neutral-700 text-white hover:text-white'
-                  : ''
-              } cursor-pointer`}
-            >
-              <span>{subItem.title}</span>
-            </a>
+          <SidebarMenuSubButton
+            asChild
+            className={`${
+              range === subItem.key
+                ? 'bg-black hover:bg-neutral-700 text-white hover:text-white'
+                : ''
+            } cursor-pointer`}
+            onClick={() => handleRangeChange(String(subItem?.key), subItem.url)}
+          >
+            <span>{subItem.title}</span>
           </SidebarMenuSubButton>
         </SidebarMenuSubItem>
       ))}
