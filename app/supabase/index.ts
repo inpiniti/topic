@@ -1,10 +1,10 @@
-import ani_list from "./ani_list";
-import daily from "./daily";
-import monthly from "./monthly";
-import yearly from "./yearly";
+import board from './board';
+import daily from './daily';
+import monthly from './monthly';
+import yearly from './yearly';
 
 const supabase = {
-  ani_list,
+  board,
   daily,
   monthly,
   yearly,

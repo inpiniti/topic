@@ -1,4 +1,4 @@
-import { supabase } from "./supabaseClient";
+import { supabase } from './supabaseClient';
 
 type Board = {
   id?: number;
@@ -7,18 +7,18 @@ type Board = {
   content: string;
   author: string;
   created_at?: string;
-  views: number;
+  views?: number;
 };
 
-const get = async ({ name, id }: { name: string; id: number }) => {
-  const query = supabase.schema("topic").from("board").select("json");
+const get = async ({ name, id }: { name?: string; id?: number }) => {
+  const query = supabase.schema('topic').from('board').select('*');
 
   if (name) {
-    query.eq("name", name);
+    query.eq('name', name);
   } else if (id) {
-    query.eq("id", id);
+    query.eq('id', id);
   } else {
-    throw new Error("Either name or id must be provided");
+    throw new Error('Either name or id must be provided');
   }
 
   const { data, error } = await query;
@@ -33,13 +33,18 @@ const get = async ({ name, id }: { name: string; id: number }) => {
 };
 
 const post = async (board: Board) => {
-  const { error } = await supabase.schema("topic").from("board").upsert(board);
+  const { data, error } = await supabase
+    .schema('topic')
+    .from('board')
+    .upsert(board);
 
   if (error) {
     throw new Error(
       `Error fetching data from Supabase : ${JSON.stringify(error)}`
     );
   }
+
+  return data;
 };
 
 const board = {
