@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { ArrowRight, Calendar } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useDateStore } from "./store/dateStore";
-import dayjs from "dayjs";
+} from '@/components/ui/card';
+import { ArrowRight, Calendar } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useDateStore } from './store/dateStore';
+import dayjs from 'dayjs';
 
 export const Daily = () => {
   const router = useRouter();
   const { date } = useDateStore();
 
   const navigate = () => {
-    router.push(`/topic/daily/${dayjs(date).format("YYYY-MM-DD")}`);
+    router.push(`/topic/daily/${dayjs(date).format('YYYY-MM-DD')}`);
   };
 
   return (

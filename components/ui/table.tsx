@@ -83,10 +83,11 @@ TableHead.displayName = 'TableHead';
 
 interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
   href?: string; // href 속성 추가
+  target?: string;
 }
 
 const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
-  ({ className, href, children, ...props }, ref) => (
+  ({ className, href, children, target, ...props }, ref) => (
     <td
       ref={ref}
       className={cn(
@@ -101,11 +102,13 @@ const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
             'p-2 block w-full h-full text-left hover:text-blue-500 hover:font-bold focus:outline-none'
           )}
           aria-label={`Navigate to ${children}`}
+          href={href}
+          target={target}
         >
           {children}
         </a>
       ) : (
-        children
+        <div className="p-2">{children}</div>
       )}
     </td>
   )

@@ -1,6 +1,5 @@
-"use client";
+import React from 'react';
 
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -8,88 +7,140 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const topics = [
-  {
-    topic: "토픽1",
-    relatedTopics: ["토픽2", "토픽3", "토픽4", "토픽5", "토픽6", "토픽7"],
-  },
-  {
-    topic: "토픽2",
-    relatedTopics: ["토픽1", "토픽3", "토픽4", "토픽5", "토픽6", "토픽7"],
-  },
-  {
-    topic: "토픽3",
-    relatedTopics: ["토픽1", "토픽2", "토픽4", "토픽5", "토픽6", "토픽7"],
-  },
-  {
-    topic: "토픽4",
-    relatedTopics: ["토픽1", "토픽2", "토픽3", "토픽5", "토픽6", "토픽7"],
-  },
-  {
-    topic: "토픽5",
-    relatedTopics: ["토픽1", "토픽2", "토픽3", "토픽4", "토픽6", "토픽7"],
-  },
-  {
-    topic: "토픽6",
-    relatedTopics: ["토픽1", "토픽2", "토픽3", "토픽4", "토픽5", "토픽7"],
-  },
-  {
-    topic: "토픽7",
-    relatedTopics: ["토픽1", "토픽2", "토픽3", "토픽4", "토픽5", "토픽6"],
-  },
-];
+interface SearchResult {
+  title: string;
+  link?: string;
+  snippet?: string;
+  href: string;
+  site: string;
+  date?: string;
+  contents: string;
+  image: string;
+  path?: string;
+  type: 'search' | 'news';
+}
 
-export default function Board() {
-  const params = useParams();
-  const name = params.name as string;
-  const decodedName = decodeURIComponent(name);
+interface PageProps {
+  decodedName: string;
+  results: {
+    search: SearchResult[];
+    news: SearchResult[];
+  };
+  error?: string;
+}
 
+const Tables = ({ results }: { results: SearchResult[] }) => {
   return (
-    <div className="flex flex-col gap-2">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        {decodedName} 게시판
-      </h1>
-      <p className="leading-7">
-        아래 토픽을 선택하면 관련 게시물을 확인 할 수 있습니다.
-      </p>
-      <div className="flex justify-end">
-        <Link href={`/board/${decodedName}/post`}>
-          <Button>글 작성하기</Button>
-        </Link>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>순위</TableHead>
-            <TableHead>topic</TableHead>
-            <TableHead>관련 topic</TableHead>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>title</TableHead>
+          <TableHead>contents</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {results.map((result: SearchResult, index: number) => (
+          <TableRow key={index}>
+            <TableCell href={result.href} target="_blank">
+              {result.title}
+            </TableCell>
+            <TableCell>{result.contents}</TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody>
-          {topics.map(
-            (
-              topic: {
-                topic: string;
-                relatedTopics: string[];
-              },
-              index: number
-            ) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{topic.topic}</TableCell>
-                <TableCell>
-                  {topic.relatedTopics.slice(0, 5).join(", ")}
-                  {topic.relatedTopics.length > 5 && " ..."}
-                </TableCell>
-              </TableRow>
-            )
-          )}
-        </TableBody>
-      </Table>
+        ))}
+        {results.length === 0 && (
+          <TableRow>
+            <TableCell>검색 결과가 없습니다.</TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  );
+};
+
+const BoardPage: React.FC<PageProps> = ({ decodedName, results }) => {
+  return (
+    <div>
+      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl flex items-center gap-2">
+        {decodedName}
+      </h1>
+      <p className="leading-7 [&:not(:first-child)]:mt-2 mb-6">
+        검색 결과 및 해당 토픽으로 작성된 게시글입니다.
+      </p>
+      <Tabs defaultValue="search">
+        <TabsList>
+          <TabsTrigger value="search">search</TabsTrigger>
+          <TabsTrigger value="news">news</TabsTrigger>
+        </TabsList>
+        <TabsContent value="search">
+          <Tables results={results.search} />
+        </TabsContent>
+        <TabsContent value="news">
+          <Tables results={results.news} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
+};
+
+async function fetchSearchResults(decodedName: string): Promise<{
+  results: {
+    search: SearchResult[];
+    news: SearchResult[];
+  };
+  error?: string;
+}> {
+  const query = encodeURIComponent(decodedName);
+
+  // Define search types you want to fetch
+  const searchTypes: ('search' | 'news')[] = ['search', 'news'];
+
+  // Function to fetch based on search type
+  const fetchByType = async (
+    type: 'search' | 'news'
+  ): Promise<SearchResult[]> => {
+    const apiUrl = `/google/api/${type}?word=${query}`;
+
+    try {
+      const res = await fetch(apiUrl);
+      if (!res.ok) {
+        throw new Error(`API 요청 실패 (${type}): ${res.statusText}`);
+      }
+      const data = await res.json();
+
+      const results: SearchResult[] = data.items ?? [];
+
+      return results;
+    } catch (error: unknown) {
+      console.error(`Google Custom Search API 오류 (${type}):`, error);
+      return [];
+    }
+  };
+
+  // Fetch all types in parallel
+  const [searchResults, newsResults] = await Promise.all(
+    searchTypes.map((type) => fetchByType(type))
+  );
+
+  return {
+    results: {
+      search: searchResults,
+      news: newsResults,
+    },
+  };
 }
+
+const BoardPageWrapper = async ({ params }: { params: { name: string } }) => {
+  const { name } = params;
+  const decodedName = decodeURIComponent(name);
+
+  const { results, error } = await fetchSearchResults(decodedName);
+
+  return (
+    <BoardPage decodedName={decodedName} results={results} error={error} />
+  );
+};
+
+export default BoardPageWrapper;
