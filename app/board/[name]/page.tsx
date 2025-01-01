@@ -2,6 +2,7 @@ import React from "react";
 
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 
 interface SearchResult {
   title: string;
@@ -30,19 +31,23 @@ const SearchTables = ({ results }: { results: SearchResult[] }) => {
       <TableBody>
         {results.map((result: SearchResult, index: number) => (
           <TableRow key={index}>
-            <TableCell className="flex flex-col gap-1">
-              <div className="text-sm">{result.site}</div>
-              <div className="text-xs">{result.path}</div>
-              <a
-                className="text-lg text-blue-500"
-                href={result.href}
-                target="_blank"
-              >
-                {result.title}
-              </a>
-              <div>
-                <span className="text-xs line-clamp-1">{result.date}</span>
-                <span className="text-xs line-clamp-2">{result.contents}</span>
+            <TableCell>
+              <div className="flex flex-col gap-1">
+                <div className="text-xs">{result.site}</div>
+                <div className="text-xs">{result.path}</div>
+                <a
+                  className="text-base font-bold text-blue-500 leading-tight"
+                  href={result.href}
+                  target="_blank"
+                >
+                  {result.title}
+                </a>
+                <div>
+                  <span className="text-xs line-clamp-1">{result.date}</span>
+                  <span className="text-xs line-clamp-2">
+                    {result.contents}
+                  </span>
+                </div>
               </div>
             </TableCell>
           </TableRow>
@@ -65,27 +70,29 @@ const NewsTables = ({ results }: { results: SearchResult[] }) => {
           <TableRow key={index}>
             <TableCell>
               <div className="flex flex-row gap-4">
+                <img
+                  className="rounded-lg object-cover w-24 h-24"
+                  src={result.image}
+                  alt={result.title}
+                />
                 <div className="flex flex-col gap-1">
-                  <div className="text-sm">{result.site}</div>
+                  <div className="text-xs">{result.site}</div>
                   <a
-                    className="text-lg text-blue-500"
+                    className="text-base font-bold text-blue-500 leading-tight"
                     href={result.href}
                     target="_blank"
                   >
                     {result.title}
                   </a>
                   <div>
-                    <span className="text-xs line-clamp-2">
+                    <span className="text-xs line-clamp-1">
                       {result.contents}
                     </span>
-                    <span className="text-xs line-clamp-1">{result.date}</span>
+                    <span className="text-xs text-neutral-400 line-clamp-1">
+                      {result.date}
+                    </span>
                   </div>
                 </div>
-                <img
-                  className="rounded-lg object-cover w-32 h-20"
-                  src={result.image}
-                  alt={result.title}
-                />
               </div>
             </TableCell>
           </TableRow>
@@ -110,10 +117,14 @@ const BoardPage: React.FC<PageProps> = ({ decodedName, results }) => {
         검색 결과 및 해당 토픽으로 작성된 게시글입니다.
       </p>
       <Tabs defaultValue="search">
-        <TabsList>
-          <TabsTrigger value="search">search</TabsTrigger>
-          <TabsTrigger value="news">news</TabsTrigger>
-        </TabsList>
+        <div className="flex justify-between">
+          <TabsList>
+            <TabsTrigger value="board">게시글</TabsTrigger>
+            <TabsTrigger value="search">search</TabsTrigger>
+            <TabsTrigger value="news">news</TabsTrigger>
+          </TabsList>
+          <Button>글쓰기</Button>
+        </div>
         <TabsContent value="search">
           <SearchTables results={results.search} />
         </TabsContent>
