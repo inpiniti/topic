@@ -31,22 +31,70 @@ interface PageProps {
   };
 }
 
-const Tables = ({ results }: { results: SearchResult[] }) => {
+const SearchTables = ({ results }: { results: SearchResult[] }) => {
   return (
     <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>title</TableHead>
-          <TableHead>contents</TableHead>
-        </TableRow>
-      </TableHeader>
       <TableBody>
         {results.map((result: SearchResult, index: number) => (
           <TableRow key={index}>
-            <TableCell href={result.href} target="_blank">
-              {result.title}
+            <TableCell className="flex flex-col gap-1">
+              <div className="text-sm">{result.site}</div>
+              <div className="text-xs">{result.path}</div>
+              <a
+                className="text-lg text-blue-500"
+                href={result.href}
+                target="_blank"
+              >
+                {result.title}
+              </a>
+              <div>
+                <span className="text-xs line-clamp-1">{result.date}</span>
+                <span className="text-xs line-clamp-2">{result.contents}</span>
+              </div>
             </TableCell>
-            <TableCell>{result.contents}</TableCell>
+          </TableRow>
+        ))}
+        {results.length === 0 && (
+          <TableRow>
+            <TableCell>검색 결과가 없습니다.</TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  );
+};
+
+const NewsTables = ({ results }: { results: SearchResult[] }) => {
+  return (
+    <Table>
+      <TableBody>
+        {results.map((result: SearchResult, index: number) => (
+          <TableRow key={index}>
+            <TableCell>
+              <div className="flex flex-row gap-4">
+                <div className="flex flex-col gap-1">
+                  <div className="text-sm">{result.site}</div>
+                  <a
+                    className="text-lg text-blue-500"
+                    href={result.href}
+                    target="_blank"
+                  >
+                    {result.title}
+                  </a>
+                  <div>
+                    <span className="text-xs line-clamp-2">
+                      {result.contents}
+                    </span>
+                    <span className="text-xs line-clamp-1">{result.date}</span>
+                  </div>
+                </div>
+                <img
+                  className="rounded-lg object-cover w-32 h-20"
+                  src={result.image}
+                  alt={result.title}
+                />
+              </div>
+            </TableCell>
           </TableRow>
         ))}
         {results.length === 0 && (
@@ -74,10 +122,10 @@ const BoardPage: React.FC<PageProps> = ({ decodedName, results }) => {
           <TabsTrigger value="news">news</TabsTrigger>
         </TabsList>
         <TabsContent value="search">
-          <Tables results={results.search} />
+          <SearchTables results={results.search} />
         </TabsContent>
         <TabsContent value="news">
-          <Tables results={results.news} />
+          <NewsTables results={results.news} />
         </TabsContent>
       </Tabs>
     </div>
@@ -100,16 +148,14 @@ async function fetchSearchResults(decodedName: string): Promise<{
   const fetchByType = async (
     type: "search" | "news"
   ): Promise<SearchResult[]> => {
-    const apiUrl = `/google/api/${type}?word=${query}`;
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/google/${type}?word=${query}`;
 
     try {
       const res = await fetch(apiUrl);
-      if (!res.ok) {
-        throw new Error(`API 요청 실패 (${type}): ${res.statusText}`);
-      }
+
       const data = await res.json();
 
-      const results: SearchResult[] = data.items ?? [];
+      const results: SearchResult[] = data ?? [];
 
       return results;
     } catch (error: unknown) {

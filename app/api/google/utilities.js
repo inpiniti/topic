@@ -313,8 +313,6 @@ export function getInterestResults(request) {
 
         if (obj.agent) nextOptions.agent = obj.agent;
 
-        console.log("nextOptions", nextOptions);
-
         return request(nextOptions);
       })
       .then((res) => {
@@ -370,11 +368,8 @@ export function getTrendingResults(request) {
 
     options.qs = { ...options.qs, ...searchTypeMap[searchType].extraParams };
 
-    console.log("options", options);
-
     return request(options).then((res) => {
       try {
-        console.log("res", res);
         /** JSON.parse will decode unicode */
         return JSON.stringify(JSON.parse(res.slice(5)));
       } catch (e) {
