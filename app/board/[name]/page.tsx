@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import {
   Table,
@@ -7,8 +7,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface SearchResult {
   title: string;
@@ -20,7 +20,7 @@ interface SearchResult {
   contents: string;
   image: string;
   path?: string;
-  type: 'search' | 'news';
+  type: "search" | "news";
 }
 
 interface PageProps {
@@ -29,7 +29,6 @@ interface PageProps {
     search: SearchResult[];
     news: SearchResult[];
   };
-  error?: string;
 }
 
 const Tables = ({ results }: { results: SearchResult[] }) => {
@@ -95,11 +94,11 @@ async function fetchSearchResults(decodedName: string): Promise<{
   const query = encodeURIComponent(decodedName);
 
   // Define search types you want to fetch
-  const searchTypes: ('search' | 'news')[] = ['search', 'news'];
+  const searchTypes: ("search" | "news")[] = ["search", "news"];
 
   // Function to fetch based on search type
   const fetchByType = async (
-    type: 'search' | 'news'
+    type: "search" | "news"
   ): Promise<SearchResult[]> => {
     const apiUrl = `/google/api/${type}?word=${query}`;
 
@@ -132,15 +131,17 @@ async function fetchSearchResults(decodedName: string): Promise<{
   };
 }
 
-const BoardPageWrapper = async ({ params }: { params: { name: string } }) => {
-  const { name } = params;
+const BoardPageWrapper = async ({
+  params,
+}: {
+  params: Promise<{ name: string }>;
+}) => {
+  const { name } = await params;
   const decodedName = decodeURIComponent(name);
 
-  const { results, error } = await fetchSearchResults(decodedName);
+  const { results } = await fetchSearchResults(decodedName);
 
-  return (
-    <BoardPage decodedName={decodedName} results={results} error={error} />
-  );
+  return <BoardPage decodedName={decodedName} results={results} />;
 };
 
 export default BoardPageWrapper;
