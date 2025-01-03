@@ -7,6 +7,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '@/components/ui/context-menu';
+
 import { Title } from './Title';
 
 interface Params {
@@ -66,9 +73,16 @@ export default async function DailyComponent({
                   <TableCell href={`/board/${topic.topic}`}>
                     {topic.topic}
                   </TableCell>
-                  <TableCell href={`/board/${topic.topic}`}>
-                    {topic.relatedTopics.slice(0, 5).join(', ')}
-                    {topic.relatedTopics.length > 5 && ' ...'}
+                  <TableCell>
+                    <ContextMenu>
+                      <ContextMenuTrigger className="flex">
+                        {topic.relatedTopics.slice(0, 5).join(', ')}
+                        {topic.relatedTopics.length > 5 && ' ...'}
+                      </ContextMenuTrigger>
+                      <ContextMenuContent>
+                        <ContextMenuItem inset>delete</ContextMenuItem>
+                      </ContextMenuContent>
+                    </ContextMenu>
                   </TableCell>
                 </TableRow>
               )
