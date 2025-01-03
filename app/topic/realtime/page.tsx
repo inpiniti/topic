@@ -19,6 +19,7 @@ export default async function DailyComponent() {
       headers: {
         'Content-Type': 'application/json',
       },
+      cache: 'no-cache',
     }
   );
   const topics = await response.json();
