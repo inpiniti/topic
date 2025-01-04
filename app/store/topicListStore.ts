@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
-export const useTopicListStore = create()(
+const useTopicListStore = create()(
   devtools(
     (set) => ({
       topicList: [],
@@ -11,7 +11,9 @@ export const useTopicListStore = create()(
         }),
     }),
     {
-      name: "topicList",
+      name: 'topicList',
     }
   )
 );
+
+export default useTopicListStore;

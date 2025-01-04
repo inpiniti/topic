@@ -1,8 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Title } from './Title';
 
 interface SearchResult {
   title: string;
@@ -14,7 +15,7 @@ interface SearchResult {
   contents: string;
   image: string;
   path?: string;
-  type: "search" | "news";
+  type: 'search' | 'news';
 }
 
 interface PageProps {
@@ -113,6 +114,7 @@ const BoardPage: React.FC<PageProps> = ({ decodedName, results }) => {
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl flex items-center gap-2">
         {decodedName}
       </h1>
+      <Title />
       <p className="leading-7 [&:not(:first-child)]:mt-2 mb-6">
         검색 결과 및 해당 토픽으로 작성된 게시글입니다.
       </p>
@@ -146,11 +148,11 @@ async function fetchSearchResults(decodedName: string): Promise<{
   const query = encodeURIComponent(decodedName);
 
   // Define search types you want to fetch
-  const searchTypes: ("search" | "news")[] = ["search", "news"];
+  const searchTypes: ('search' | 'news')[] = ['search', 'news'];
 
   // Function to fetch based on search type
   const fetchByType = async (
-    type: "search" | "news"
+    type: 'search' | 'news'
   ): Promise<SearchResult[]> => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/google/${type}?word=${query}`;
 
