@@ -5,16 +5,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from '@/components/ui/context-menu';
-
-import { Title } from './Title';
+import { Title } from "./Title";
 
 interface Params {
   date: string;
@@ -27,16 +20,16 @@ export default async function DailyComponent({
 }) {
   const { date } = await params;
   const payload = {
-    range: 'daily',
+    range: "daily",
     date,
   };
   const queryParams = new URLSearchParams(payload).toString();
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/google/topics?${queryParams}`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
   );
@@ -74,15 +67,8 @@ export default async function DailyComponent({
                     {topic.topic}
                   </TableCell>
                   <TableCell>
-                    <ContextMenu>
-                      <ContextMenuTrigger className="flex">
-                        {topic.relatedTopics.slice(0, 5).join(', ')}
-                        {topic.relatedTopics.length > 5 && ' ...'}
-                      </ContextMenuTrigger>
-                      <ContextMenuContent>
-                        <ContextMenuItem inset>delete</ContextMenuItem>
-                      </ContextMenuContent>
-                    </ContextMenu>
+                    {topic.relatedTopics.slice(0, 5).join(", ")}
+                    {topic.relatedTopics.length > 5 && " ..."}
                   </TableCell>
                 </TableRow>
               )

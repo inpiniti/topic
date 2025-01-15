@@ -17,36 +17,34 @@ export async function GET(request: NextRequest) {
       request.nextUrl.searchParams.get("date") || dayjs().format("YYYY-MM-DD");
     const range = request.nextUrl.searchParams.get("range") || "daily";
 
-    // range 가 realtime 이면 디비 조회 없이 바로 topic 가져오기
-    if (range === "realtime") {
-      const topic = await getTopic();
-      return NextResponse.json(topic);
-    } else {
-      // db 조회
-      const res = await supabase.daily.get({
-        date,
-      });
+    // db 조회
+    const res = await supabase.daily.get({
+      date,
+    });
 
-      if (res.length > 0) {
-        // db에 있으면 바로 반환
-        return NextResponse.json(res[0].json);
+    // 데이터가 있는 경우
+    if (res.length > 0) {
+      // realtime 인지?
+      if (range === "realtime") {
+        const topic = await getTopic();
+        return NextResponse.json(topic);
       } else {
-        // db 에 없으면서 오늘날짜 인 경우만
-        if (dayjs(date).format("YYYY-MM-DD") === dayjs().format("YYYY-MM-DD")) {
-          // 없으면 topic 가져오기
-          const topic = await getTopic();
-
-          // db에 저장
-          await supabase.daily.post({
-            date,
-            json: topic,
-          });
-
-          return NextResponse.json(topic);
-        } else {
-          // db 에도 없고 오늘날짜도 아닌 경우
-          return NextResponse.json([]);
-        }
+        // realtime 이 아니면 db 데이터 반환
+        return NextResponse.json(res[0].json);
+      }
+    } else {
+      // 데이터가 없는경우
+      // realtime 인지?
+      if (range === "realtime") {
+        const topic = await getTopic();
+        // db 저장
+        await supabase.daily.post({
+          date,
+          json: topic,
+        });
+        return NextResponse.json(topic);
+      } else {
+        return NextResponse.json([]);
       }
     }
   } catch (error: unknown) {
